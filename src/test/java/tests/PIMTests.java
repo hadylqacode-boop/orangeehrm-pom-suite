@@ -11,7 +11,6 @@ public class PIMTests extends BaseTest {
 
     private final JsonNode data = JsonDataReader.read("src/test/resources/testdata/employees.json");
 
-    // 🔐 Méthode de login réutilisable
     private void loginAsAdmin() {
         LoginPage loginPage = new LoginPage(driver);
         loginPage.open();
@@ -21,7 +20,6 @@ public class PIMTests extends BaseTest {
         );
     }
 
-    // ✅ Test 1 — Ajout employé (succès)
     @Test
     public void addEmployeeShouldSucceed() {
         loginAsAdmin();
@@ -47,22 +45,23 @@ public class PIMTests extends BaseTest {
         );
     }
 
-    // ✅ Test 2 — Mise à jour profil
     @Test
     public void updateProfileShouldSucceed() {
         loginAsAdmin();
 
         MyInfoPage myInfoPage = new MyInfoPage(driver);
         myInfoPage.open();
-        myInfoPage.updateFirstName(data.get("profileUpdate").get("firstName").asText());
 
-        Assert.assertTrue(
-                myInfoPage.getSuccessToast().toLowerCase().contains("success"),
-                "Le profil n'a pas été mis à jour avec succès."
+        String expectedFirstName = data.get("profileUpdate").get("firstName").asText();
+        myInfoPage.updateFirstName(expectedFirstName);
+
+        Assert.assertEquals(
+                myInfoPage.getFirstNameValue(),
+                expectedFirstName,
+                "Le prénom n'a pas été mis à jour correctement."
         );
     }
 
-    // ✅ Test 3 — Champ obligatoire (corrigé)
     @Test
     public void addEmployeeWithoutRequiredFieldShouldShowValidation() {
         loginAsAdmin();
@@ -76,13 +75,11 @@ public class PIMTests extends BaseTest {
         AddEmployeePage addEmployeePage = new AddEmployeePage(driver);
         addEmployeePage.addEmployeeWithoutLastName("OnlyFirstName");
 
-        // Vérifie que le message d'erreur est affiché
         Assert.assertTrue(
                 addEmployeePage.isRequiredErrorDisplayed(),
                 "Le message Required n'est pas affiché."
         );
 
-        // Vérifie que le texte est correct
         Assert.assertTrue(
                 addEmployeePage.getRequiredErrorText().toLowerCase().contains("required"),
                 "Le texte du message d'erreur n'est pas correct."
