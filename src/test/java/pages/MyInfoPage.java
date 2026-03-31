@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import utils.WaitUtils;
 
@@ -21,8 +22,13 @@ public class MyInfoPage {
     }
 
     public void updateFirstName(String value) {
-        wait.visible(firstName).clear();
-        wait.visible(firstName).sendKeys(value);
+        var field = wait.visible(firstName);
+
+        field.click();
+        field.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        field.sendKeys(Keys.DELETE);
+        field.sendKeys(value);
+
         wait.clickWithJs(saveBtn);
     }
 
