@@ -20,15 +20,20 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Install Firefox and Xvfb
+      - name: Setup Firefox
+        id: setup-firefox
+        uses: browser-actions/setup-firefox@v1
+
+      - name: Verify Firefox
         run: |
-          sudo apt-get update
-          sudo apt-get install -y firefox xvfb
+          firefox --version
+          "${{ steps.setup-firefox.outputs.firefox-path }}" --version
 
       - name: Run tests
         env:
           CI: true
-        run: xvfb-run -a mvn clean test
+          FIREFOX_BIN: ${{ steps.setup-firefox.outputs.firefox-path }}
+        run: mvn clean test
 
       - name: Upload reports
         if: always()
