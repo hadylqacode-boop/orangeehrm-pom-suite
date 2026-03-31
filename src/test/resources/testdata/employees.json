@@ -1,0 +1,25 @@
+{
+  "validLogin": {
+    "username": "Admin",
+    "password": "admin123"
+  },
+  "invalidLogin": {
+    "username": "Admin",
+    "password": "wrongPass123"
+  },
+  "employees": [
+    {
+      "firstName": "Amine",
+      "middleName": "QA",
+      "lastName": "Imtihan"
+    },
+    {
+      "firstName": "Amal",
+      "middleName": "Auto",
+      "lastName": "Test"
+    }
+  ],
+  "profileUpdate": {
+    "firstName": "AdminUpdated"
+  }
+}
